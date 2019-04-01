@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as xml
 import json
 import cv2
+import os
 
 #load json file
 with open('example.json') as json_file:
@@ -12,13 +13,14 @@ fixed_path = '/yourpath/' + working_dir + '/' #filename has to be appended as we
 num_of_data = len(json_data)
 
 #loop through every json object
+i = 0 #to rename the files
 
 for data_index in range(num_of_data):
     
     file_name = json_data[data_index]['name'] #get the name of the image file
-    output_xml_filename = file_name[:-3] + '.xml' # output xml file name is the image file name without the extension
+    output_xml_filename = str(i) + '.xml' # output xml file name is {i}.xml ; the image will be renamed in the later part of the code
     file_path = fixed_path + file_name #full path of the image
-    
+    renamed_image_path = fixed_path + str(i) + '.jpg'
     #XML file structure
     root = xml.Element("annotation") #root element
 
@@ -108,8 +110,8 @@ for data_index in range(num_of_data):
         ymax.text = objects[obj_index]['box2d']['y2']
         
         
-        
-
+    os.rename(file_path, renamed_image_path)    
+    i += 1 #increment i     
     #create XML tree and write the output
     tree = xml.ElementTree(root)
     with open(output_xml_filename, 'wb') as out:
