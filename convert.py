@@ -71,6 +71,7 @@ for data_index in range(num_of_data):
     objects = json_data[data_index]["labels"] #the list of objects
     unwanted_lists = ['traffic light', 'traffic sign', 'drivable area', 'lane'] #list of object categories to be ignored
     
+    detection_counter = 0 #to verify whether there's any object at all (sometimes there might be an image with detections solely from unwanted lists)
     for obj_index in range(len(objects)): #loop through the objects
         
         object_category = objects[obj_index]['category'] #category of the object
@@ -104,13 +105,16 @@ for data_index in range(num_of_data):
         ymin      = xml.SubElement(bounding_box_element, "ymin")
         xmax      = xml.SubElement(bounding_box_element, "xmax")
         ymax      = xml.SubElement(bounding_box_element, "ymax")
-        xmin.text = objects[obj_index]['box2d']['x1']
-        ymin.text = objects[obj_index]['box2d']['y1']
-        xmax.text = objects[obj_index]['box2d']['x2']
-        ymax.text = objects[obj_index]['box2d']['y2']
+        xmin.text = str(objects[obj_index]['box2d']['x1'])
+        ymin.text = str(objects[obj_index]['box2d']['y1'])
+        xmax.text = str(objects[obj_index]['box2d']['x2'])
+        ymax.text = str(objects[obj_index]['box2d']['y2'])
+        detection_counter += 1
+
+    if detection_counter == 0:
+        continue
         
-        
-    os.rename(file_path, renamed_image_path)    
+    os.rename(file_path, renamed_image_path) #rename the file    
     i += 1 #increment i     
     #create XML tree and write the output
     tree = xml.ElementTree(root)
