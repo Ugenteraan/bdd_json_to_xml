@@ -46,13 +46,12 @@ for data_index in range(num_of_data):
     database.text  = "Unknown"
     
     
-    #UNCOMMENT THESE 2 LINES ONLY IF YOUR JSON DATA HAS NO IMAGE HEIGHT AND WIDTH!
-    #                           --START CODE--
+   
     #the image has to be read first in order to get the details of the image size for the next xml node
     image = cv2.imread(file_path) #read the image
     img_height, img_width, img_depth = image.shape #get the image height, width and depth
-    #                            --END CODE--
-    
+
+
     #size data 
     size_element = xml.Element("size")
     root.append(size_element)
@@ -69,7 +68,7 @@ for data_index in range(num_of_data):
     
     #object data
     objects = json_data[data_index]["labels"] #the list of objects
-    unwanted_lists = ['traffic light', 'traffic sign', 'drivable area', 'lane'] #list of object categories to be ignored
+    unwanted_lists = ['drivable area', 'lane'] #list of object categories to be ignored
     
     detection_counter = 0 #to verify whether there's any object at all (sometimes there might be an image with detections solely from unwanted lists)
     for obj_index in range(len(objects)): #loop through the objects
